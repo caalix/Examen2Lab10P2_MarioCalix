@@ -6,6 +6,8 @@
 package examen2lab10p2_mariocalix;
 
 import javax.swing.JOptionPane;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
@@ -69,6 +71,8 @@ public class Main extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Viner Hand ITC", 0, 36)); // NOI18N
         jLabel1.setText("Jak 3");
 
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Carros");
+        jTree1.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jScrollPane1.setViewportView(jTree1);
 
         jLabel2.setText("Jak");
@@ -170,6 +174,8 @@ public class Main extends javax.swing.JFrame {
         jLabel13.setText("Ataque:");
 
         jLabel14.setText("Tipo:");
+
+        cb_tipocarro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Normal", "Belico", "Salto", "Ataque", "Malvado" }));
 
         jLabel15.setText("Derrape:");
 
@@ -292,18 +298,102 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jb_crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_crearActionPerformed
-        if(cb_tipocarro.getSelectedItem().equals(1)){
+        if(cb_tipocarro.getSelectedItem().toString().equals("Normal")){
         Carro p = new Carro(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
                 Integer.parseInt(tf_velocidad.getText()), 
                 Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
-        adminAlumno ap = new adminAlumno("./alumnos.cbm");
-        ap.cargarArchivo();
-        ap.setAlumno(p);
-        ap.escribirArchivo();
+        adminCarro ac = new adminCarro("./carros.cbm");
+        ac.cargarArchivo();
+        ac.setCarro(p);
+        ac.escribirArchivo();
         JOptionPane.showMessageDialog(this,
-                "Alumno guardado exitosamente");
+                "Carro creado exitosamente");
         tf_nombre.setText("");
-        tf_edad.setText("");
+        tf_derrape.setText("");
+        tf_velocidad.setText("");
+        tf_ataque.setText("");
+        tf_vida.setText("");
+        }
+        
+        else if(cb_tipocarro.getSelectedItem().toString().equals("Belico")){
+        Carro p = new Belicos(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
+                Integer.parseInt(tf_velocidad.getText()), 
+                Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
+        adminCarro ac = new adminCarro("./carros.cbm");
+        ac.cargarArchivo();
+        ac.setCarro(p);
+        ac.escribirArchivo();
+        JOptionPane.showMessageDialog(this,
+                "Carro creado exitosamente");
+        tf_nombre.setText("");
+        tf_derrape.setText("");
+        tf_velocidad.setText("");
+        tf_ataque.setText("");
+        tf_vida.setText("");
+        }
+        
+        else if(cb_tipocarro.getSelectedItem().toString().equals("Ataque")){
+        Carro p = new Ataque(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
+                Integer.parseInt(tf_velocidad.getText()), 
+                Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
+        adminCarro ac = new adminCarro("./carros.cbm");
+        ac.cargarArchivo();
+        ac.setCarro(p);
+        ac.escribirArchivo();
+        JOptionPane.showMessageDialog(this,
+                "Carro creado exitosamente");
+        tf_nombre.setText("");
+        tf_derrape.setText("");
+        tf_velocidad.setText("");
+        tf_ataque.setText("");
+        tf_vida.setText("");
+        }
+        
+        else if(cb_tipocarro.getSelectedItem().toString().equals("Malvado")){
+        Carro p = new Malvado(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
+                Integer.parseInt(tf_velocidad.getText()), 
+                Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
+        adminCarro ac = new adminCarro("./carros.cbm");
+        ac.cargarArchivo();
+        ac.setCarro(p);
+        ac.escribirArchivo();
+        JOptionPane.showMessageDialog(this,
+                "Carro creado exitosamente");
+        tf_nombre.setText("");
+        tf_derrape.setText("");
+        tf_velocidad.setText("");
+        tf_ataque.setText("");
+        tf_vida.setText("");
+        }
+        
+        else if(cb_tipocarro.getSelectedItem().toString().equals("Salto")){
+        Carro p = new Salto(200,tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
+                Integer.parseInt(tf_velocidad.getText()), 
+                Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
+        adminCarro ac = new adminCarro("./carros.cbm");
+        ac.cargarArchivo();
+        ac.setCarro(p);
+        ac.escribirArchivo();
+        JOptionPane.showMessageDialog(this,
+                "Carro creado exitosamente");
+        tf_nombre.setText("");
+        tf_derrape.setText("");
+        tf_velocidad.setText("");
+        tf_ataque.setText("");
+        tf_vida.setText("");
+        }
+        
+        try {
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) jTree1.getSelectionPath().getLastPathComponent();
+            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(tf_nombre.getText());
+            selectedNode.add(newNode);
+
+            // reload jtree model
+            DefaultTreeModel model = (DefaultTreeModel) jTree1.getModel();
+            model.reload();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Por favor seleccione donde desea guardar el carro en el Jtree.");
+
         }
     }//GEN-LAST:event_jb_crearActionPerformed
 
