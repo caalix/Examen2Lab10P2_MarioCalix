@@ -6,22 +6,19 @@ import java.util.stream.IntStream;
 public class Belicos extends Carro {
 
     //vida extras aleatorias
-    private int vidas_extra = 1;
 
     Random random = new Random();
-    int n = random.nextInt(6);
+    int n = 200 + random.nextInt(500);
 
-    public Belicos(int vidas_extra, String nombre, int derrape, int velocidad, int ataque, int vida) {
+    public Belicos(String nombre, int derrape, int velocidad, int ataque, int vida) {
         super(nombre, derrape, velocidad, ataque, vida);
-        this.vidas_extra = vidas_extra;
     }
 
-    public int getVidas_extra() {
-        return vidas_extra;
+    @Override
+    public void setVida(int vida) {
+        super.setVida(vida+n); 
     }
 
-    public void setVidas_extra(int vidas_extra) {
-        this.vidas_extra = vidas_extra + n;
-    }
+    
 
 }

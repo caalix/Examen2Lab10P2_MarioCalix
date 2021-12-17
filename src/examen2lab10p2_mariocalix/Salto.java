@@ -17,7 +17,7 @@ public class Salto extends Carro{
     private int metros;
     
     Random random = new Random();
-    int n = random.nextInt(200);
+    int n = 50 + random.nextInt(200);
 
 
     public Salto(int metros, String nombre, int derrape, int velocidad, int ataque, int vida) {
