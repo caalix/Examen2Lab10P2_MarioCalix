@@ -23,6 +23,10 @@ public class Ataque extends Carro{
         return porcentaje;
     }
 
+    public Ataque(String nombre, int derrape, int velocidad, int ataque, int vida) {
+        super(nombre, derrape, velocidad, ataque, vida);
+    }
+
     @Override
     public void setAtaque(int ataque) {
         super.setAtaque(ataque+(ataque/n)); //To change body of generated methods, choose Tools | Templates.
