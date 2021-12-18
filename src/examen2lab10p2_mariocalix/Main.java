@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
 
 /**
  *
@@ -64,16 +65,18 @@ public class Main extends javax.swing.JFrame implements Runnable {
         initComponents();
         this.setLocationRelativeTo(null);
         DefaultMutableTreeNode carros;
-        
+
         DefaultTreeModel modeloARBOL = (DefaultTreeModel) jTree1.getModel();
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloARBOL.getRoot();
-        
-        for (Carro c : ac.getListaCarros()) {
+        ac.cargarArchivo();
+        if (!ac.getListaCarros().isEmpty()) {
+            for (Carro c : ac.getListaCarros()) {
                 carros = new DefaultMutableTreeNode(c);
                 raiz.add(carros);
                 modeloARBOL.reload();
 
             }
+        }
     }
 
     /**
@@ -102,6 +105,10 @@ public class Main extends javax.swing.JFrame implements Runnable {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        tf_carroJAK = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        tf_jakVs = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
@@ -133,6 +140,14 @@ public class Main extends javax.swing.JFrame implements Runnable {
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Carros");
         jTree1.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jTree1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTree1MouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTree1MousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTree1);
 
         jLabel2.setText("Jak");
@@ -161,9 +176,18 @@ public class Main extends javax.swing.JFrame implements Runnable {
 
         jLabel7.setText("Vida Ciber Errol:");
 
-        jLabel8.setText("Carro X VS. Carro Y");
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel8.setText("VS. ");
 
         jLabel9.setText("Batalla TITULO (INICIAL, FINAL)");
+
+        tf_carroJAK.setText("____");
+
+        jLabel17.setText("_____");
+
+        tf_jakVs.setText("_____");
+
+        jLabel19.setText("Ciber Errol Car");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -175,8 +199,13 @@ public class Main extends javax.swing.JFrame implements Runnable {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel5)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(tf_jakVs)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel17)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
@@ -184,20 +213,28 @@ public class Main extends javax.swing.JFrame implements Runnable {
                                     .addComponent(pb_vidaJak, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(pb_vidaErrol, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel3))
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addComponent(jLabel3)
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jLabel2)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(tf_carroJAK)))
+                                        .addGap(0, 0, Short.MAX_VALUE))))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel7)
                                     .addComponent(jLabel6))
                                 .addGap(59, 59, 59))))
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel19)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(27, 27, 27))
         );
         jPanel2Layout.setVerticalGroup(
@@ -207,7 +244,9 @@ public class Main extends javax.swing.JFrame implements Runnable {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(tf_carroJAK))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pb_vidaJak, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -221,16 +260,20 @@ public class Main extends javax.swing.JFrame implements Runnable {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel17))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel7))
                 .addGap(40, 40, 40)
-                .addComponent(jLabel8)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(tf_jakVs)
+                    .addComponent(jLabel19))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel9)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         tab.addTab("Juego", jPanel2);
@@ -385,10 +428,10 @@ public class Main extends javax.swing.JFrame implements Runnable {
 
     private void jb_crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_crearActionPerformed
         DefaultMutableTreeNode carros;
-        
+
         DefaultTreeModel modeloARBOL = (DefaultTreeModel) jTree1.getModel();
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloARBOL.getRoot();
-        
+
         if (cb_tipocarro.getSelectedItem().toString().equals("Normal")) {
             Carro p = new Carro(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
                     Integer.parseInt(tf_velocidad.getText()),
@@ -461,7 +504,7 @@ public class Main extends javax.swing.JFrame implements Runnable {
             tf_vida.setText("");
         }
 
-       /* try {
+        /* try {
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) jTree1.getSelectionPath().getLastPathComponent();
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(tf_nombre.getText());
             selectedNode.add(newNode);
@@ -472,16 +515,13 @@ public class Main extends javax.swing.JFrame implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }*/
-        
-        
-        
         for (Carro c : ac.getListaCarros()) {
-                carros = new DefaultMutableTreeNode(c);
-                raiz.add(carros);
-                modeloARBOL.reload();
+            carros = new DefaultMutableTreeNode(c);
+            raiz.add(carros);
+            modeloARBOL.reload();
 
-            }
-        
+        }
+
     }//GEN-LAST:event_jb_crearActionPerformed
 
     private void cb_eliminarcarroItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_eliminarcarroItemStateChanged
@@ -497,23 +537,24 @@ public class Main extends javax.swing.JFrame implements Runnable {
                             ac.getListaCarros().toArray());
             cb_eliminarcarro.setModel(modelo);
         }
+        
+        
     }//GEN-LAST:event_tabStateChanged
 
     private void jb_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_eliminarActionPerformed
         // ELIMINAR
         //DefaultMutableTreeNode carros;
-        
+
         DefaultTreeModel modeloARBOL = (DefaultTreeModel) jTree1.getModel();
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloARBOL.getRoot();
-        
-        
-          ac.cargarArchivo();
-          int pos=cb_eliminarcarro.getSelectedIndex();
-          ac.getListaCarros().remove(pos);
-          ac.escribirArchivo();
-          JOptionPane.showMessageDialog(null, "Auto eliminado exitosamente");
-          comboP();
-          raiz.removeAllChildren();
+
+        ac.cargarArchivo();
+        int pos = cb_eliminarcarro.getSelectedIndex();
+        ac.getListaCarros().remove(pos);
+        ac.escribirArchivo();
+        JOptionPane.showMessageDialog(null, "Auto eliminado exitosamente");
+        comboP();
+        raiz.removeAllChildren();
 
     }//GEN-LAST:event_jb_eliminarActionPerformed
 
@@ -543,6 +584,19 @@ public class Main extends javax.swing.JFrame implements Runnable {
 
             }*/
     }//GEN-LAST:event_jb_crearMouseClicked
+
+    private void jTree1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTree1MouseClicked
+        TreeSelectionModel smd = jTree1.getSelectionModel();
+        if(smd.getSelectionCount() > 0){
+        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) jTree1.getSelectionPath().getLastPathComponent();
+        tf_carroJAK.setText(selectedNode.getUserObject().toString());
+        tf_jakVs.setText(selectedNode.getUserObject().toString());
+        }
+    }//GEN-LAST:event_jTree1MouseClicked
+
+    private void jTree1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTree1MousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTree1MousePressed
 
     /**
      * @param args the command line arguments
@@ -578,8 +632,8 @@ public class Main extends javax.swing.JFrame implements Runnable {
             }
         });
     }
-    
-    public void comboP(){
+
+    public void comboP() {
         adminCarro ap
                 = new adminCarro("./carros.cbm");
         ap.cargarArchivo();
@@ -602,6 +656,8 @@ public class Main extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -620,7 +676,9 @@ public class Main extends javax.swing.JFrame implements Runnable {
     private javax.swing.JProgressBar pb_vidaJak;
     private javax.swing.JTabbedPane tab;
     private javax.swing.JTextField tf_ataque;
+    private javax.swing.JLabel tf_carroJAK;
     private javax.swing.JTextField tf_derrape;
+    private javax.swing.JLabel tf_jakVs;
     private javax.swing.JTextField tf_nombre;
     private javax.swing.JTextField tf_velocidad;
     private javax.swing.JTextField tf_vida;
@@ -628,5 +686,5 @@ public class Main extends javax.swing.JFrame implements Runnable {
 
     int pos;
     adminCarro ac = new adminCarro("./carros.cbm");
-    
+
 }
