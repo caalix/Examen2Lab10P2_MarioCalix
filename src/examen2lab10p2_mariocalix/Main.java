@@ -36,8 +36,8 @@ public class Main extends javax.swing.JFrame implements Runnable {
                     if (pb_vidaErrol.getValue() <= 0) {
                         vivo = false;
                         JOptionPane.showMessageDialog(this, "Ganaste");
-                        SantaClaus abrir = new SantaClaus();
-                        abrir.show();
+                        //SantaClaus abrir = new SantaClaus();
+                        //abrir.show();
                         break;
                     }
                     if (count == 2) {
