@@ -18,6 +18,9 @@ public class adminCarro {
         archivo = new File(path);
     }
 
+    public adminCarro() {
+    }
+
     public ArrayList<Carro> getListaCarros() {
         return listaCarros;
     }
@@ -36,7 +39,7 @@ public class adminCarro {
 
     @Override
     public String toString() {
-        return "- " +listaCarros;
+        return "listaCarros=" + listaCarros;
     }
 
     //extra mutador

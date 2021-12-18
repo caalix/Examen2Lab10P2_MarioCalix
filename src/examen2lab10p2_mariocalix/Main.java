@@ -5,7 +5,9 @@
  */
 package examen2lab10p2_mariocalix;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -13,13 +15,65 @@ import javax.swing.tree.DefaultTreeModel;
  *
  * @author mario
  */
-public class Main extends javax.swing.JFrame {
+public class Main extends javax.swing.JFrame implements Runnable {
 
     /**
      * Creates new form Main
      */
+    Thread hilo = new Thread(this);
+    int count = 0;
+    boolean pausa = false;
+    boolean vivo = true;
+
+    @Override
+    public void run() {
+        while (vivo) {
+            System.out.println("");
+            while (!pausa) {
+                try {
+                    pb_vidaErrol.setValue(pb_vidaErrol.getValue() - ataqueJak);
+                    if (pb_vidaErrol.getValue() <= 0) {
+                        vivo = false;
+                        JOptionPane.showMessageDialog(this, "Ganaste");
+                        break;
+                    }
+                    if (count == 2) {
+                        pb_vidaJak.setValue(pb_vidaJak.getValue() - ataqueErrol);
+                        count = 0;
+                        if (pb_vidaJak.getValue() <= 0) {
+                            vivo = false;
+                            JOptionPane.showMessageDialog(this, "Perdiste");
+                            break;
+                        }
+                    }
+                    Thread.sleep(500);
+                    count++;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private int vidaJak = 5000;
+    private int ataqueErrol = 500;
+    private int vidaErrol = 30000;
+    private int ataqueJak = 5000;
+
     public Main() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        DefaultMutableTreeNode carros;
+        
+        DefaultTreeModel modeloARBOL = (DefaultTreeModel) jTree1.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloARBOL.getRoot();
+        
+        for (Carro c : ac.getListaCarros()) {
+                carros = new DefaultMutableTreeNode(c);
+                raiz.add(carros);
+                modeloARBOL.reload();
+
+            }
     }
 
     /**
@@ -32,14 +86,14 @@ public class Main extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tab = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
         jLabel2 = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        pb_vidaJak = new javax.swing.JProgressBar();
         jLabel3 = new javax.swing.JLabel();
-        jProgressBar2 = new javax.swing.JProgressBar();
+        pb_vidaErrol = new javax.swing.JProgressBar();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -71,6 +125,12 @@ public class Main extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Viner Hand ITC", 0, 36)); // NOI18N
         jLabel1.setText("Jak 3");
 
+        tab.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabStateChanged(evt);
+            }
+        });
+
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Carros");
         jTree1.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jScrollPane1.setViewportView(jTree1);
@@ -80,8 +140,18 @@ public class Main extends javax.swing.JFrame {
         jLabel3.setText("Ciber Errol");
 
         jButton1.setText("Iniciar Partida");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Pausar Partida");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Ataque de Jak:");
 
@@ -111,8 +181,8 @@ public class Main extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jProgressBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(pb_vidaJak, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(pb_vidaErrol, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,11 +209,11 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pb_vidaJak, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jProgressBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pb_vidaErrol, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -163,7 +233,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(39, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Juego", jPanel2);
+        tab.addTab("Juego", jPanel2);
 
         jLabel10.setText("Nombre:");
 
@@ -180,6 +250,11 @@ public class Main extends javax.swing.JFrame {
         jLabel15.setText("Derrape:");
 
         jb_crear.setText("Crear");
+        jb_crear.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jb_crearMouseClicked(evt);
+            }
+        });
         jb_crear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jb_crearActionPerformed(evt);
@@ -188,7 +263,18 @@ public class Main extends javax.swing.JFrame {
 
         jLabel16.setText("Eliminar Carro:");
 
+        cb_eliminarcarro.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cb_eliminarcarroItemStateChanged(evt);
+            }
+        });
+
         jb_eliminar.setText("Eliminar");
+        jb_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_eliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -269,7 +355,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(65, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Carros", jPanel3);
+        tab.addTab("Carros", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -281,7 +367,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(tab)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -290,7 +376,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1)
+                .addComponent(tab)
                 .addContainerGap())
         );
 
@@ -298,92 +384,84 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jb_crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_crearActionPerformed
-        if(cb_tipocarro.getSelectedItem().toString().equals("Normal")){
-        Carro p = new Carro(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
-                Integer.parseInt(tf_velocidad.getText()), 
-                Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
-        adminCarro ac = new adminCarro("./carros.cbm");
-        ac.cargarArchivo();
-        ac.setCarro(p);
-        ac.escribirArchivo();
-        JOptionPane.showMessageDialog(this,
-                "Carro creado exitosamente");
-        tf_nombre.setText("");
-        tf_derrape.setText("");
-        tf_velocidad.setText("");
-        tf_ataque.setText("");
-        tf_vida.setText("");
-        }
+        DefaultMutableTreeNode carros;
         
-        else if(cb_tipocarro.getSelectedItem().toString().equals("Belico")){
-        Carro p = new Belicos(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
-                Integer.parseInt(tf_velocidad.getText()), 
-                Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
-        adminCarro ac = new adminCarro("./carros.cbm");
-        ac.cargarArchivo();
-        ac.setCarro(p);
-        ac.escribirArchivo();
-        JOptionPane.showMessageDialog(this,
-                "Carro creado exitosamente");
-        tf_nombre.setText("");
-        tf_derrape.setText("");
-        tf_velocidad.setText("");
-        tf_ataque.setText("");
-        tf_vida.setText("");
-        }
+        DefaultTreeModel modeloARBOL = (DefaultTreeModel) jTree1.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloARBOL.getRoot();
         
-        else if(cb_tipocarro.getSelectedItem().toString().equals("Ataque")){
-        Carro p = new Ataque(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
-                Integer.parseInt(tf_velocidad.getText()), 
-                Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
-        adminCarro ac = new adminCarro("./carros.cbm");
-        ac.cargarArchivo();
-        ac.setCarro(p);
-        ac.escribirArchivo();
-        JOptionPane.showMessageDialog(this,
-                "Carro creado exitosamente");
-        tf_nombre.setText("");
-        tf_derrape.setText("");
-        tf_velocidad.setText("");
-        tf_ataque.setText("");
-        tf_vida.setText("");
+        if (cb_tipocarro.getSelectedItem().toString().equals("Normal")) {
+            Carro p = new Carro(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
+                    Integer.parseInt(tf_velocidad.getText()),
+                    Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
+            ac.cargarArchivo();
+            ac.setCarro(p);
+            ac.escribirArchivo();
+            JOptionPane.showMessageDialog(this,
+                    "Carro creado exitosamente");
+            tf_nombre.setText("");
+            tf_derrape.setText("");
+            tf_velocidad.setText("");
+            tf_ataque.setText("");
+            tf_vida.setText("");
+        } else if (cb_tipocarro.getSelectedItem().toString().equals("Belico")) {
+            Carro p = new Belicos(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
+                    Integer.parseInt(tf_velocidad.getText()),
+                    Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
+            ac.cargarArchivo();
+            ac.setCarro(p);
+            ac.escribirArchivo();
+            JOptionPane.showMessageDialog(this,
+                    "Carro creado exitosamente");
+            tf_nombre.setText("");
+            tf_derrape.setText("");
+            tf_velocidad.setText("");
+            tf_ataque.setText("");
+            tf_vida.setText("");
+        } else if (cb_tipocarro.getSelectedItem().toString().equals("Ataque")) {
+            Carro p = new Ataque(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
+                    Integer.parseInt(tf_velocidad.getText()),
+                    Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
+            ac.cargarArchivo();
+            ac.setCarro(p);
+            ac.escribirArchivo();
+            JOptionPane.showMessageDialog(this,
+                    "Carro creado exitosamente");
+            tf_nombre.setText("");
+            tf_derrape.setText("");
+            tf_velocidad.setText("");
+            tf_ataque.setText("");
+            tf_vida.setText("");
+        } else if (cb_tipocarro.getSelectedItem().toString().equals("Malvado")) {
+            Carro p = new Malvado(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
+                    Integer.parseInt(tf_velocidad.getText()),
+                    Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
+            ac.cargarArchivo();
+            ac.setCarro(p);
+            ac.escribirArchivo();
+            JOptionPane.showMessageDialog(this,
+                    "Carro creado exitosamente");
+            tf_nombre.setText("");
+            tf_derrape.setText("");
+            tf_velocidad.setText("");
+            tf_ataque.setText("");
+            tf_vida.setText("");
+        } else if (cb_tipocarro.getSelectedItem().toString().equals("Salto")) {
+            Carro p = new Salto(200, tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
+                    Integer.parseInt(tf_velocidad.getText()),
+                    Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
+            ac.cargarArchivo();
+            ac.setCarro(p);
+            ac.escribirArchivo();
+            JOptionPane.showMessageDialog(this,
+                    "Carro creado exitosamente");
+            tf_nombre.setText("");
+            tf_derrape.setText("");
+            tf_velocidad.setText("");
+            tf_ataque.setText("");
+            tf_vida.setText("");
         }
-        
-        else if(cb_tipocarro.getSelectedItem().toString().equals("Malvado")){
-        Carro p = new Malvado(tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
-                Integer.parseInt(tf_velocidad.getText()), 
-                Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
-        adminCarro ac = new adminCarro("./carros.cbm");
-        ac.cargarArchivo();
-        ac.setCarro(p);
-        ac.escribirArchivo();
-        JOptionPane.showMessageDialog(this,
-                "Carro creado exitosamente");
-        tf_nombre.setText("");
-        tf_derrape.setText("");
-        tf_velocidad.setText("");
-        tf_ataque.setText("");
-        tf_vida.setText("");
-        }
-        
-        else if(cb_tipocarro.getSelectedItem().toString().equals("Salto")){
-        Carro p = new Salto(200,tf_nombre.getText(), Integer.parseInt(tf_derrape.getText()),
-                Integer.parseInt(tf_velocidad.getText()), 
-                Integer.parseInt(tf_ataque.getText()), Integer.parseInt(tf_vida.getText()));
-        adminCarro ac = new adminCarro("./carros.cbm");
-        ac.cargarArchivo();
-        ac.setCarro(p);
-        ac.escribirArchivo();
-        JOptionPane.showMessageDialog(this,
-                "Carro creado exitosamente");
-        tf_nombre.setText("");
-        tf_derrape.setText("");
-        tf_velocidad.setText("");
-        tf_ataque.setText("");
-        tf_vida.setText("");
-        }
-        
-        try {
+
+       /* try {
             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) jTree1.getSelectionPath().getLastPathComponent();
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(tf_nombre.getText());
             selectedNode.add(newNode);
@@ -392,10 +470,79 @@ public class Main extends javax.swing.JFrame {
             DefaultTreeModel model = (DefaultTreeModel) jTree1.getModel();
             model.reload();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Por favor seleccione donde desea guardar el carro en el Jtree.");
+            e.printStackTrace();
+        }*/
+        
+        
+        
+        for (Carro c : ac.getListaCarros()) {
+                carros = new DefaultMutableTreeNode(c);
+                raiz.add(carros);
+                modeloARBOL.reload();
 
-        }
+            }
+        
     }//GEN-LAST:event_jb_crearActionPerformed
+
+    private void cb_eliminarcarroItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_eliminarcarroItemStateChanged
+
+    }//GEN-LAST:event_cb_eliminarcarroItemStateChanged
+
+    private void tabStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabStateChanged
+        if (tab.getSelectedIndex() == 1) {
+            //adminCarro ac = new adminCarro("./carros.cbm");
+            ac.cargarArchivo();
+            DefaultComboBoxModel modelo
+                    = new DefaultComboBoxModel(
+                            ac.getListaCarros().toArray());
+            cb_eliminarcarro.setModel(modelo);
+        }
+    }//GEN-LAST:event_tabStateChanged
+
+    private void jb_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_eliminarActionPerformed
+        // ELIMINAR
+        //DefaultMutableTreeNode carros;
+        
+        DefaultTreeModel modeloARBOL = (DefaultTreeModel) jTree1.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloARBOL.getRoot();
+        
+        
+          ac.cargarArchivo();
+          int pos=cb_eliminarcarro.getSelectedIndex();
+          ac.getListaCarros().remove(pos);
+          ac.escribirArchivo();
+          JOptionPane.showMessageDialog(null, "Auto eliminado exitosamente");
+          comboP();
+          raiz.removeAllChildren();
+
+    }//GEN-LAST:event_jb_eliminarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        hilo = new Thread(this);
+        pb_vidaErrol.setMaximum(vidaErrol);
+        pb_vidaJak.setMaximum(vidaJak);
+        pb_vidaErrol.setValue(vidaErrol);
+        pb_vidaJak.setValue(vidaJak);
+        hilo.start();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        pausa = !pausa;
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jb_crearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_crearMouseClicked
+        /*DefaultMutableTreeNode carros = (DefaultMutableTreeNode) jTree1.getModel();
+        
+        DefaultTreeModel modeloARBOL = (DefaultTreeModel) jTree1.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloARBOL.getRoot();
+        
+        for (Carro c : ac.getListaCarros()) {
+                carros = new DefaultMutableTreeNode(c);
+                raiz.add(carros);
+                modeloARBOL.reload();
+
+            }*/
+    }//GEN-LAST:event_jb_crearMouseClicked
 
     /**
      * @param args the command line arguments
@@ -431,6 +578,16 @@ public class Main extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void comboP(){
+        adminCarro ap
+                = new adminCarro("./carros.cbm");
+        ap.cargarArchivo();
+        DefaultComboBoxModel modelo
+                = new DefaultComboBoxModel(
+                        ap.getListaCarros().toArray());
+        cb_eliminarcarro.setModel(modelo);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cb_eliminarcarro;
@@ -455,17 +612,21 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JProgressBar jProgressBar1;
-    private javax.swing.JProgressBar jProgressBar2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTree jTree1;
     private javax.swing.JButton jb_crear;
     private javax.swing.JButton jb_eliminar;
+    private javax.swing.JProgressBar pb_vidaErrol;
+    private javax.swing.JProgressBar pb_vidaJak;
+    private javax.swing.JTabbedPane tab;
     private javax.swing.JTextField tf_ataque;
     private javax.swing.JTextField tf_derrape;
     private javax.swing.JTextField tf_nombre;
     private javax.swing.JTextField tf_velocidad;
     private javax.swing.JTextField tf_vida;
     // End of variables declaration//GEN-END:variables
+
+    int pos;
+    adminCarro ac = new adminCarro("./carros.cbm");
+    
 }
